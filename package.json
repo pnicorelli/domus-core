@@ -1,0 +1,25 @@
+{
+  "name": "domus-core",
+  "version": "0.0.1",
+  "description": "alpha lib",
+  "main": "Dominous.js",
+  "dependencies": {
+    "ipfs": "^0.34.4",
+    "ipfs-pubsub-room": "^1.4.1",
+    "js-sha256": "^0.9.0",
+    "node-rsa": "^1.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Paolo Nicorelli",
+    "email": "p.nicorelli@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/pnicorelli/domus-core"
+  },
+  "license": "ISC"
+}
