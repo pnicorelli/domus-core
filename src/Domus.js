@@ -51,7 +51,7 @@ module.exports = class Domus extends EventEmitter {
       });
 
       domusHall.on('message', (message) => {
-        let msg = this.readMessage(message.data.toString())
+        let msg = this.readMessage(message.data)
         if( msg.type === 'HELLO'){
           this.addUser(msg.data, message.from);
         }
@@ -67,6 +67,14 @@ module.exports = class Domus extends EventEmitter {
             this.resources.addReference(msg.data[i]);
             this.emit('resource finded', result)
           }
+        }
+        if( msg.type === 'CHAT'){
+          let m = {
+            userId: msg.from,
+            cdate: msg.data.cdate,
+            msg: msg.data.msg
+          }
+          this.emit('chat message', m)
         }
         if( msg.type === 'ERROR'){
           console.error('This message is invalid', msg, message)
@@ -127,7 +135,7 @@ module.exports = class Domus extends EventEmitter {
     }
     //TO DO encryption with ORG pubkey
     let result = JSON.stringify(msg);
-    return result;
+    return this.resources.encrypt(result);
   }
 
   /*
@@ -136,8 +144,9 @@ module.exports = class Domus extends EventEmitter {
   readMessage(message){
     //TO DO decrypt with ORG privatekey
     let msg, tmp, data;
+    let plainMessage = this.resources.decrypt(message);
     try{
-      tmp = JSON.parse(message);
+      tmp = JSON.parse(plainMessage);
       try{
         data = JSON.parse(tmp.data);
       } catch (e){
@@ -154,6 +163,7 @@ module.exports = class Domus extends EventEmitter {
         type: 'ERROR',
         data: {
           original: message,
+          plain: plainMessage,
           error: err
         }
       }
@@ -193,7 +203,7 @@ module.exports = class Domus extends EventEmitter {
   }
 
   addResource(resource){
-    this.resources.addFile(resource, this.user);
+    this.resources.add(resource, this.user);
   }
 
   findResource(search){
@@ -201,5 +211,10 @@ module.exports = class Domus extends EventEmitter {
       this.domusHall.broadcast( this.writeMessage('RESOURCE_SEARCH', {query:search}));
       let result = this.resources.find(search);
     }
+  }
+
+  sendChatMessage(msg){
+    let cdate = (new Date()).toISOString();
+    this.domusHall.broadcast( this.writeMessage('CHAT', {msg:msg, cdate:cdate }));
   }
 }

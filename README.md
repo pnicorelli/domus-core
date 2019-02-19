@@ -2,6 +2,7 @@
 
 playing with IPFS
 
+Domus is a place where people exchange encrypted messages and resources.
 
 ## Usage
 
