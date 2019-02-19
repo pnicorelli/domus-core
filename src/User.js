@@ -1,23 +1,34 @@
 'use stricts';
-const sha256 = require('js-sha256');
-const NodeRSA = require('node-rsa');
+
+const CryptoHelper = require('./CryptoHelper');
 
 module.exports = class User {
-  constructor(args){
-    this.name = args.name;
-    this.privateKey = args.privateKey;
+  constructor(name){
+    this.name = name;
+    this.crypto = new CryptoHelper();
     this.peerId = '';
-    let key = NodeRSA(this.privateKey);
-    this.publicKey = key.exportKey('public');
-    this.userId = this.getUserId();
+    this.userId = '';
+  }
+
+  setPrivateKey(pk){
+    this.crypto.setPrivateKey(pk)
+    this.userId = this.crypto.sha(this.crypto.getPublicKey());
+  }
+
+  setUserId(uid){
+    this.userId = uid;
   }
 
   getUserId(){
-    return sha256(this.publicKey);
+    return this.userId;
   }
 
   setPeerId(peerId){
     this.peerId = peerId;
+  }
+
+  getPeerId(peerId){
+    return this.peerId;
   }
 
   getName(){
@@ -27,8 +38,7 @@ module.exports = class User {
   headers(){
     return JSON.stringify({
       userId: this.getUserId(),
-      name: this.getName(),
-      db: 'to be defined',
+      name: this.getName()
     });
   }
 }

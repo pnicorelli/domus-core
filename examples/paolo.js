@@ -66,8 +66,8 @@ const dc = new Domus(orgConfig);
 dc.on('user joined', (user)=>{
   console.log(`---------------------------`);
   dc.getUsersArray().forEach( (u)=>{
-    let status = u.isOnline ? 'online':'offline';
-    console.log(`${u.name} is ${status}`);
+    // let status = u.isOnline ? 'online':'offline';
+    console.log(`${u.name} join`);
   })
   console.log(`---------------------------`);
 });
@@ -75,23 +75,27 @@ dc.on('user joined', (user)=>{
 dc.on('user left', (user)=>{
   console.log(`---------------------------`);
   dc.getUsersArray().forEach( (u)=>{
-    let status = u.isOnline ? 'online':'offline';
-    console.log(`${u.name} is ${status}`);
+    // let status = u.isOnline ? 'online':'offline';
+    console.log(`${u.name} left`);
   })
   console.log(`---------------------------`);
 });
 
 dc.on('ready', ()=>{
   dc.addResource({
-    local_path: './rocco.js',                   //where the file is, need for loading
+    local_path: './examples/rocco.js',                   //where the file is, need for loading
     path: '/users/rocco/apps/domus/rocco.js',   // virtual path, need for indexing
-    type: 'ASCII text',                         // resource's type, optional for handle different kind of file before use it
+    type: 'file',                         // resource's type, optional for handle different kind of file before use it
     tags: 'javascript example, javascrit, apps' // something for taxonomy, optional for create classes of resources
   });
-  dc.addResource({
-    local_path: './antonio.js',                   //where the file is, need for loading
-    path: '/users/rocco/rocco/domus/antonio.js',   // virtual path, need for indexing
-    type: 'ASCII text',                         // resource's type, optional for handle different kind of file before use it
-    tags: 'javascript, JS, apps' // something for taxonomy, optional for create classes of resources
-  });
+//   dc.addResource({
+//     local_path: './examples/antonio.js',                   //where the file is, need for loading
+//     path: '/users/rocco/rocco/domus/antonio.js',   // virtual path, need for indexing
+//     type: 'file',                         // resource's type, optional for handle different kind of file before use it
+//     tags: 'javascript, JS, apps' // something for taxonomy, optional for create classes of resources
+//   });
+})
+
+dc.on('chat message', (m)=>{
+  console.log(m);
 })

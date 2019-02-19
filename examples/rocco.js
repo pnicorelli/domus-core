@@ -70,6 +70,9 @@ dc.on('ready', ()=>{
 
 })
 dc.on('resource finded', (r)=>{
-  console.log('resource finded');
-  console.log(r);
+
+  dc.resources.fetch(r[0]).then( (result)=>{
+    console.log(result);
+  })
+
 })
